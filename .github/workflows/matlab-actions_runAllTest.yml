@@ -1,0 +1,24 @@
+name: Run MATLAB Tests On Github-Hosted Runner
+on: [push]
+jobs:
+  my-job:
+    name: Run MATLAB Tests and Generate Artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v2
+        with:
+          products: Simulink Simulink_Test simulink_Coverage
+      - name: Run tests and generate Artifacts
+        uses: matlab-actions/run-tests@v2
+        with:
+          test-results-junit: test-results/results.xml
+          test-results-pdf: test-results/results.pdf
+          test-results-simulink-test: test-results/results.mldatx
+      - name: Upload atifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results
